@@ -1,0 +1,12 @@
+﻿  Game.cpp
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(16,13): warning C4244: 'initialisation' : conversion de 'T' en 'float', perte possible de données
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(16,13): warning C4244:         with
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(16,13): warning C4244:         [
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(16,13): warning C4244:             T=unsigned int
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(16,13): warning C4244:         ]
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(17,13): warning C4244: 'initialisation' : conversion de 'T' en 'float', perte possible de données
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(17,13): warning C4244:         with
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(17,13): warning C4244:         [
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(17,13): warning C4244:             T=unsigned int
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(17,13): warning C4244:         ]
+  ProjetJeu2D.vcxproj -> C:\Users\luccb\source\repos\TowerDefense\x64\Debug\ProjetJeu2D.exe
