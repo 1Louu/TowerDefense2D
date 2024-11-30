@@ -6,7 +6,7 @@
 void App::init()
 {
 
-    _window.create(sf::VideoMode(1600, 960), "TowerDefense");
+    _window.create(sf::VideoMode(1600, 960), "RETRO TOWER DEFENSE");
 
     sm = SceneManager::GetInstance();
     MainMenu* menu = new MainMenu(this);

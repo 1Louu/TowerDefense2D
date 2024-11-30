@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include <iostream>
 
-class Text : public Entity  // Purpose of a class Text itself isnt that meaningful bc we have sf::Text although this one isnt inherited through Entity so decided to make a class Text that inherit entity. 
+class Text : public Entity  // Purpose of a class Text itself isnt that meaningful bc I have sf::Text although this one isnt inherited through Entity so decided to make a class Text that inherit entity.
 {
 	int font_size; 
 public:

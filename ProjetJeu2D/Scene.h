@@ -11,7 +11,6 @@ protected:
 	std::vector <Entity*> VisualEntityList;
 
 public:
-
 	virtual void init() = 0;
 	virtual void update(float deltatime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

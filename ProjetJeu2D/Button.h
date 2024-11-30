@@ -7,10 +7,10 @@ class Button : public Entity
 {
 	App* app;
 public:
-	Button(float _x, float _y, sf::Texture& _texture, float _width, float _lenght, App* _app);
+	Button(float _x, float _y, sf::Texture& _texture, int _functiontype);
+	Button(float _x, float _y, sf::Texture& _texture, int _textcordX, int _textcordY, int textsize, float _width, float _length, App* _app);
 	void ClickedOn();
 	void update(float dt) override;
 };
 
 #endif
-

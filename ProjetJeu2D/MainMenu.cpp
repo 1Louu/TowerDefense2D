@@ -9,11 +9,11 @@ MainMenu::MainMenu(App* app)
 
 void MainMenu::init()
 {
-	if (!textureMenu.loadFromFile("image/ui.png"))
+	if (!textureMenu.loadFromFile("image/buttonmainmenu.png"))
 	{
 		std::cout << "Error Texture" << std::endl;
 	};
-	if (!texturebackground.loadFromFile("image/tilemap_packed.png"))
+	if (!texturebackground.loadFromFile("image/selfmadetilemap.png"))
 	{
 		std::cout << "Error Texture" << std::endl;
 	};
@@ -25,13 +25,13 @@ void MainMenu::init()
 	float posy = CurrentApp->getWindow().getSize().y / 2; // Middle of window on axis Y
 	float btnsizeX = 500; 
 	float btnsizeY = 150;
+	bg = new Background(0, 0, texturebackground, 1 * 8, 2 * 8, 8, posx * 2, posy * 2);
 
-	bg = new Background(0, 0, texturebackground, 4 * 8, 2 *8, 8, posx*2, posy*2);
-
-	Start = new Button(posx - btnsizeX/2, posy - btnsizeY/2, textureMenu, btnsizeX, btnsizeY, CurrentApp);
+	Start = new Button(posx - btnsizeX/2, posy - btnsizeY/2, textureMenu, 0, 0, 32,  btnsizeX, btnsizeY, CurrentApp);
+	Start->setVisual(textureMenu, 0, 0, btnsizeX, btnsizeY, btnsizeX, btnsizeY);
 
 	texttitle = new Text(posx- (30*10), posy /2.5, fontMenu, 60);
-	texttitle->setText("This is a TOWER DEFENSE");
+	texttitle->setText("RETRO \nTOWER DEFENSE");
 
 
 	VisualEntityList.push_back(bg); 
