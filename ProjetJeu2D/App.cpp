@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Game.h"
 #include "MainMenu.h"
+#include "GameOver.h"
 
 void App::init()
 {
@@ -11,6 +12,8 @@ void App::init()
     sm = SceneManager::GetInstance();
     MainMenu* menu = new MainMenu(this);
     Game* game = new Game(this);
+    Gameover* GameOver = new Gameover(this);
+    sm->AddScene("GameOver", GameOver);
     sm->AddScene("menu", menu);
     sm->AddScene("game", game);
     sm->ChangeScene("menu");  

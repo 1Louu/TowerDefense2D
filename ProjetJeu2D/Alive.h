@@ -2,7 +2,7 @@
 #define ALIVE_H__
 
 class Alive {
-private:
+protected:
 	float maxHP;
 	float HP;
 public:

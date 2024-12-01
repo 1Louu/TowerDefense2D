@@ -6,6 +6,7 @@
 class Button : public Entity
 {
 	int functiontype; 
+	bool lockclick; 
 	App* app;
 public:
 	Button(float _x, float _y, sf::Texture& _texture, App* app, int _functiontype);

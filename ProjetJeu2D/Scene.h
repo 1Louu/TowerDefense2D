@@ -15,7 +15,8 @@ public:
 	virtual void update(float deltatime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual void resetscene();
-	virtual void buttonPress(int _case) {}; 
+	virtual void buttonPress(int _case) {};
+	virtual void EntityEventHandler(int _case) {};
 };
 
 #endif

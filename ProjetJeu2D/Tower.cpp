@@ -4,13 +4,13 @@
 Tower::Tower(float _x, float _y, sf::Texture& _texture, int _towertemplate, std::vector<Mob*>* _moblist, std::vector<Entity*>* _VELtemp)
 	: Entity(_x, _y), texture(_texture)
 {
-	target = NULL; 
+	target = nullptr;
 	VELtemp = _VELtemp;  // Visual Entity List so i can insert the bullet here
 	moblist = _moblist; // Moblist so i can read where the mobs are at for my range
 	TowerTemplate(_towertemplate);
 	m_visual.setPosition(_x, _y);
 	m_visual.setTexture(_texture);
-	m_visual.setScale(32 / 8, 32 / 8);
+	m_visual.setScale(32 / 8, 32 / 8);  // Assuming I use my tilemap that I made which all are 8px wide and that a tile is 32px
 }
 
 void Tower::TowerTemplate(int _towertemplate)
@@ -44,16 +44,18 @@ void Tower::shootatMob(Mob* _target)
 void Tower::update(float dt)
 {
 	cooldown += dt; 
-	int moblistsize = moblist->size(); 
-	float distancex, distancey;
 
 	if (target) {
 		if (target->getflagDestroy() > 0) {
-			target == NULL; 
+			target = nullptr;
 		}
 	}
 
 	if (cooldown > firerate) {
+
+		int moblistsize = moblist->size();
+		float distancex, distancey;
+
 		if (target) {
 			distancex = target->getPosition().x - getPosition().x;
 			distancey = target->getPosition().y - getPosition().y;
@@ -64,7 +66,7 @@ void Tower::update(float dt)
 		}
 		else { 
 			for (int i = 0; i < moblistsize; i++) {
-				if ((*moblist)[i]->getflagDestroy() < 1 && !target)
+				if ((*moblist)[i]->getflagDestroy() < 1 && (!target))
 				{
 					distancex = (*moblist)[i]->getPosition().x - getPosition().x;
 					distancey = (*moblist)[i]->getPosition().y - getPosition().y;

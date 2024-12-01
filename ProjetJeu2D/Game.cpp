@@ -20,6 +20,10 @@ void Game::init()
 	float posx = CurrentApp->getWindow().getSize().x / 2; // Middle of window on axis X
 	float posy = CurrentApp->getWindow().getSize().y / 2; // Middle of window on axis Y
 
+	mobgen = 1; // One mob will spawn at beginning
+	cooldown = 3; // In 3 seconds, mob will spawn 
+	timer = 0; // Current time
+
 	// Setting Background
 	bg = new Background(0, 0, textureMap, 1 * 8, 2 * 8, 8, posx * 2, posy * 2);
 	VisualEntityList.push_back(bg);
@@ -43,20 +47,20 @@ void Game::init()
 	VisualEntityList.push_back(bg);
 
 	//Hearts
-	bg = new Background(GameScreenX +8, GameScreenY -4  - 64, textureMap, 6 * 8, 4 * 8, 8, 32, 32);
-	VisualEntityList.push_back(bg);
+	VE = new VisualElement(GameScreenX +8, GameScreenY -4  - 64, textureMap, 0);
+	VisualEntityList.push_back(VE);
 
 	//Hearts
-	bg = new Background(GameScreenX +32 +16, GameScreenY - 4 - 64, textureMap, 6 * 8, 4 * 8, 8, 32, 32);
-	VisualEntityList.push_back(bg);
+	VE = new VisualElement(GameScreenX +32 +16, GameScreenY - 4 - 64, textureMap, 0);
+	VisualEntityList.push_back(VE);
 
 	//Hearts
-	bg = new Background(GameScreenX + 64 + 24, GameScreenY - 4 - 64, textureMap, 7 * 8, 4 * 8, 8, 32, 32);
-	VisualEntityList.push_back(bg);
+	VE = new VisualElement(GameScreenX + 64 + 24, GameScreenY - 4 - 64, textureMap, 0);
+	VisualEntityList.push_back(VE);
 
 	//Coins
-	bg = new Background(GameScreenX + 64 + 24+ 128, GameScreenY - 4 - 64, textureMap, 6 * 8, 5 * 8, 8, 32, 32);
-	VisualEntityList.push_back(bg);
+	VE = new VisualElement(GameScreenX + 64 + 24+ 128, GameScreenY - 4 - 64, textureMap,2);
+	VisualEntityList.push_back(VE);
 
 	//Coins Value
 	texts = new Text(GameScreenX + 256 , GameScreenY - 12 - 64, fontMenu, 32);
@@ -99,20 +103,6 @@ void Game::init()
 
 	updatePath();
 
-	// MOBS
-	e = new Mob(GameScreenX, GameScreenY + 32 * 5, textureMap, 6 * 8, 3 * 8, 8, 32, 32, 10, 100, &itinerary, &HP);
-	VisualEntityList.push_back(e);
-	mobmanager.push_back(e);
-
-
-	e = new Mob(GameScreenX, GameScreenY + 32 * 5, textureMap, 6 * 8, 2 * 8, 8, 32, 32, 10, 25, &itinerary, &HP);
-	VisualEntityList.push_back(e);
-	mobmanager.push_back(e);
-
-	//Tower
-	tower = new Tower(GameScreenX + 32 * 5, GameScreenY + 32 * 4, textureMap, 1, &mobmanager, &VisualEntityList);
-	VisualEntityList.push_back(tower);
-
 	//btn
 	btn = new Button(GameScreenX, GameScreenY + GameScreen + 16, textureMap,CurrentApp,1 );
 	VisualEntityList.push_back(btn);
@@ -122,8 +112,8 @@ void Game::init()
 	VisualEntityList.push_back(bg);
 
 	//Cost Coins
-	bg = new Background(GameScreenX, GameScreenY + GameScreen + 16 + 12 + 64, textureMap, 7 * 8, 5 * 8, 8, 32, 32);
-	VisualEntityList.push_back(bg);
+	VE = new VisualElement(GameScreenX, GameScreenY + GameScreen + 16 + 12 + 64, textureMap, 3);
+	VisualEntityList.push_back(VE);
 
 	//Coins Value
 	texts = new Text(GameScreenX + 40, GameScreenY + +GameScreen + 20  + 64, fontMenu, 32);
@@ -131,7 +121,6 @@ void Game::init()
 	VisualEntityList.push_back(texts);
 
 	//btn
-
 	btn = new Button(GameScreenX + 96, GameScreenY + GameScreen + 16, textureMap, CurrentApp, 2);
 	VisualEntityList.push_back(btn);
 
@@ -140,13 +129,17 @@ void Game::init()
 	VisualEntityList.push_back(bg);
 
 	//Cost Coins
-	bg = new Background(GameScreenX + 96, GameScreenY + GameScreen + 16 + 12 + 64, textureMap, 7 * 8, 5 * 8, 8, 32, 32);
-	VisualEntityList.push_back(bg);
+	VE = new VisualElement(GameScreenX + 96, GameScreenY + GameScreen + 16 + 12 + 64, textureMap,3);
+	VisualEntityList.push_back(VE);
 
 	//Coins Value
 	texts = new Text(GameScreenX + 96 + 40, GameScreenY + +GameScreen + 20 + 64, fontMenu, 32);
 	texts->setText(std::to_string(5));
 	VisualEntityList.push_back(texts);
+
+	updateHearts();
+	fillPurchaseSlots(GameScreenX, GameScreenY); // Temporary until i add the option to choose tile to craft on
+
 }
 
 void Game::updatePath()
@@ -272,19 +265,48 @@ void Game::fillPath(int _index) // Function to fill the gap between CURRENT & PR
 
 void Game::buttonPress(int _case)
 {
-	switch (_case) {
-	case 1:
-		std::cout << "I have been pressed" << std::endl; 
-		break; 
-	case 2:
-		std::cout << "I have been pressed" << std::endl;
-		break;
+	if (indexslots < purchaseslots.size()) {
+		switch (_case) {
+		case 1:
+			if (coins >= 3 && indexslots <= purchaseslots.size()) {
+				tower = new Tower(purchaseslots[indexslots].x, purchaseslots[indexslots].y, textureMap, 0, &mobmanager, &VisualEntityList);
+				VisualEntityList.push_back(tower);
+				coins -= 3;
+				updateCoinsValue();
+				indexslots++;
+			}
+			break;
+		case 2:
+			if (coins >= 5 && indexslots <= purchaseslots.size()) {
+				tower = new Tower(purchaseslots[indexslots].x, purchaseslots[indexslots].y, textureMap, 1, &mobmanager, &VisualEntityList);
+				VisualEntityList.push_back(tower);
+				coins -= 5;
+				updateCoinsValue();
+				indexslots++;
+			}
+			break;
+		}
+	}
+	else {
+		std::cout << "Too many towers, cannot purchase anymore." << std::endl;
 	}
 }
 
 void Game::update(float dt)
 {
+	timer += dt; 
+	cdfastgen += dt; 
+	if (mobleftgen  > 0 && cdfastgen >0.05) {
+		generateMob(); 
+		cdfastgen = 0; 
+	}else if (timer > cooldown) {
+		generateMob(); 
+		timer = 0; 
+	}
+
 	Scene::update(dt);
+
+
 	for (int i = 0; i < VisualEntityList.size(); i++) {
 		switch (VisualEntityList[i]->getflagDestroy()) {
 		case 0:
@@ -298,5 +320,123 @@ void Game::update(float dt)
 			i--; //because i freed space, the vector has moved the content to the current index and reduced its size. 
 		}
 	}
+
+	for (int i = 0; i < mobmanager.size(); i++) {
+		if (mobmanager[i]->getflagDestroy() > 0) {
+			mobmanager.erase(mobmanager.begin() + i);
+		}
+	}
+}
+
+void Game::EntityEventHandler(int _case)
+{
+	switch (_case) {
+	case 0:
+		HP--;
+		updateHearts(); 
+		break;
+	case 1:
+		coins++; 
+		updateCoinsValue(); 
+		break; 
+	}
+}
+
+void Game::generateMob()
+{
+	float posx = CurrentApp->getWindow().getSize().x / 2; // Middle of window on axis X
+	float posy = CurrentApp->getWindow().getSize().y / 2; // Middle of window on axis Y
+
+	float GameScreen = 16 * 32; // entire Map is a square of 16 tiles with tiles of 32 pixels. 
+	float GameScreenX = posx - (GameScreen / 2);
+	float GameScreenY = posy - (GameScreen / 2);
+
+	srand(time(NULL));
+	std::cout << (rand() % 2) << std::endl;
+	if ((rand() % 2) == 0) {
+		e = new Mob(0, 0, textureMap, 6 * 8, 2 * 8, 8, 32, 32, 12, 25, &itinerary, CurrentApp);
+	}
+	else {
+		e = new Mob(0, 0, textureMap, 6 * 8, 3 * 8, 8, 32, 32, 7, 40, &itinerary, CurrentApp);
+	}
+	VisualEntityList.push_back(e);
+	mobmanager.push_back(e);
+	mobleftgen--; 
+	if (mobleftgen == 0) {
+		mobgen += 1; 
+		cooldown += 0.25; 
+		mobleftgen = mobgen; 
+	}
+
+}
+
+void Game::updateCoinsValue()
+{
+	for (int i = 0; i < VisualEntityList.size(); i++) {
+		if (Text* texttmpt = dynamic_cast<Text*> (VisualEntityList[i])) {
+			texttmpt->setText(std::to_string(coins));
+			return; // I dont need to continue the loop as I only wanted the first text of the EntityList.
+			// I know its not the best approach, i'd change it if I need more text to update in the game
+		}
+	}
+}
+
+void Game::updateHearts()
+{
+	if (HP == 0) {
+		SceneManager::GetInstance()->ChangeScene("GameOver");
+		return;
+	}
+	int heartfillcount=0; 
+	for (int i = 0; i < VisualEntityList.size(); i++) {
+		if (VisualElement* VEtmpt = dynamic_cast<VisualElement*> (VisualEntityList[i])) {
+			if (VEtmpt->getVisualElementChoice() < 2) { // get visual entity that were set as hearts.
+				switch (heartfillcount) {
+				case 0:
+					if (HP >= 1) {//heart Is full 
+						VEtmpt->VisualElementTemplate(0);
+					}
+					else { // If not full
+						VEtmpt->VisualElementTemplate(1);
+					}
+					heartfillcount++;
+					break;
+				case 1:
+					if (HP >= 2) {//heart Is full 
+						VEtmpt->VisualElementTemplate(0);
+					}
+					else { // If not full
+						VEtmpt->VisualElementTemplate(1);
+					}
+					heartfillcount++;
+					break;
+				case 2:
+					if (HP >= 3) { //heart Is full 
+						VEtmpt->VisualElementTemplate(0);
+					}
+					else { // If not full
+						VEtmpt->VisualElementTemplate(1);
+					}
+					heartfillcount++;
+					break;
+				}
+			}
+		}
+	}
+}
+
+void Game::fillPurchaseSlots(float _GameScreenX, float _GameScreenY)
+{
+	indexslots = 0; 
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 5, _GameScreenY + 32 * 4));
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 7, _GameScreenY + 32 * 4));
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 4, _GameScreenY + 32 * 6));
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 7, _GameScreenY + 32 * 6));
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 10, _GameScreenY + 32 * 2));
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 8, _GameScreenY + 32 * 8));
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 10, _GameScreenY + 32 *4));
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 9, _GameScreenY + 32 * 3));
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 2, _GameScreenY + 32 * 11));
+	purchaseslots.push_back(sf::Vector2f(_GameScreenX + 32 * 4, _GameScreenY + 32 * 11));
 }
 
