@@ -31,7 +31,9 @@ public:
 	Game(App* app);
 	virtual void init();
 	void updatePath(); 
-	void fillPath(int _index); 
+	void fillPath(int _index);
+	virtual void buttonPress(int _case) override;
+	virtual void update(float dt) override; 
 };
 
 #endif

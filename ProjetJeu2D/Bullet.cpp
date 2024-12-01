@@ -1,8 +1,8 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(float _x, float _y, sf::Texture& _texture, Mob* _target) :
-	Entity(_x, _y), AMovable(sf::Vector2f(0,0), 150)
+Bullet::Bullet(float _x, float _y, sf::Texture& _texture, Mob* _target, float _power) :
+	Entity(_x, _y), AMovable(sf::Vector2f(0,0), 150), power(_power)
 {
 	target = _target;
 	m_visual.setTexture(_texture); 
@@ -22,26 +22,40 @@ void Bullet::move(float dt)
 
 void Bullet::update(float dt)
 {
-	if (target) {
-		float distancex = target->getPosition().x - getPosition().x;
-		float distancey = target->getPosition().y - getPosition().y;
-		setDirection(sf::Vector2f(distancex, distancey));
-	}
-	// if enemy touch visual then mob take dmg and free bullet from entitylist then delete bullet
+	if (flagDestroy <  1) {
+		if (target->getflagDestroy() < 1) {
+			float distancex = target->getPosition().x - getPosition().x;
+			float distancey = target->getPosition().y - getPosition().y;
+			setDirection(sf::Vector2f(distancex, distancey));
+			
+			move(dt);
 
-	animationtime += dt; 
-	if (animationtime > 0.75) {
-		animationtime = 0; 
-		switch (animationindex) {
-		case 0:
-			m_visual.setTextureRect(sf::IntRect(9 * 8, 3 * 8, 5, 5));
-			animationindex = 1; 
-			break; 
-		case 1:
+			if (distancex <= 4 * direction.x && distancey <= 4 * direction.y) {
+				this->flagDestroy = 1;
+				target->takeDMG(power);
+			}
+		}
+		else {
+			this->flagDestroy = 1;
+		}
 
-			m_visual.setTextureRect(sf::IntRect(9 * 8, 2 * 8, 5, 5));
-			animationindex = 0;
-			break; 
+		// do the hit here 
+
+
+		animationtime += dt;
+		if (animationtime > 0.75) {
+			animationtime = 0;
+			switch (animationindex) {
+			case 0:
+				m_visual.setTextureRect(sf::IntRect(9 * 8, 3 * 8, 5, 5));
+				animationindex = 1;
+				break;
+			case 1:
+
+				m_visual.setTextureRect(sf::IntRect(9 * 8, 2 * 8, 5, 5));
+				animationindex = 0;
+				break;
+			}
 		}
 	}
 }

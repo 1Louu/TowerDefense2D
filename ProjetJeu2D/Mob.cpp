@@ -2,8 +2,8 @@
 
 #include "Mob.h"
 
-Mob::Mob(float _x, float _y, sf::Texture& _texture, int _textcordX, int _textcordY, int textsize, float _width, float _length, float _maxHP, float _vit, std::vector<Path*>* _itinerary)
-	: Entity(_x, _y, _texture, _textcordX, _textcordY, textsize, _width, _length), Alive(_maxHP), AMovable(sf::Vector2f(0,0), _vit) {
+Mob::Mob(float _x, float _y, sf::Texture& _texture, int _textcordX, int _textcordY, int textsize, float _width, float _length, float _maxHP, float _vit, std::vector<Path*>* _itinerary, int* _HP)
+	: Entity(_x, _y, _texture, _textcordX, _textcordY, textsize, _width, _length), Alive(_maxHP), AMovable(sf::Vector2f(0,0), _vit), HPPlayer(_HP) {
 	itinerary = _itinerary; 
 	itinerarystep = 1;
 	setPosition((*itinerary)[0]->getPosition().x, (*itinerary)[0]->getPosition().y);
@@ -16,7 +16,7 @@ Mob::Mob(float _x, float _y, sf::Texture& _texture, int _textcordX, int _textcor
 void Mob::takeDMG(float _DMG) {
 	Alive::takeDMG(_DMG);
 	if (getHP() <= 0) {
-		std::cout << "Mob just died" << std::endl;
+		flagDestroy = 1; 
 	}
 }
 
@@ -28,8 +28,11 @@ void Mob::move(float dt) {
 
 void Mob::update(float dt)
 {
-	move(dt);
-	updateDirection();
+	if(flagDestroy <1) 
+	{
+		move(dt);
+		updateDirection();
+	}
 }
 
 void Mob::setTextureSetting(sf::Texture& _texture, int _textcordX, int _textcordY, int textsize, float _width, float _length)
@@ -72,9 +75,13 @@ void Mob::updateDirection()
 		}
 	}
 	else {
-		if (getPosition() == (*itinerary)[itinerarystep]->getPosition()) {
-			std::cout << "I have reached my goal. I am now done." << std::endl;
-			setDirection(sf::Vector2f(0, 0));
+		float directx, directy; 
+		directx = (*itinerary)[itinerarystep]->getPosition().x - getPosition().x;
+		directy = (*itinerary)[itinerarystep]->getPosition().y - getPosition().y;
+
+		if (directx <= 4 *direction.x && directy <= 4* direction.y) {
+			this->flagDestroy = 1; 
+			(*HPPlayer) = (*HPPlayer) - 1; 
 		}
 	}
 }

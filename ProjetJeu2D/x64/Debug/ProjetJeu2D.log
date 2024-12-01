@@ -9,9 +9,5 @@ C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(21,13): warning C4
 C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(21,13): warning C4244:         [
 C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(21,13): warning C4244:             T=unsigned int
 C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(21,13): warning C4244:         ]
-C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(155,16): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-  Path.cpp
-  Tower.cpp
-C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Tower.cpp(47,18): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-  Génération de code en cours...
+C:\Users\luccb\source\repos\TowerDefense\ProjetJeu2D\Game.cpp(156,16): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
   ProjetJeu2D.vcxproj -> C:\Users\luccb\source\repos\TowerDefense\x64\Debug\ProjetJeu2D.exe

@@ -11,6 +11,7 @@ class Tower : public Entity
 	int price; 
 	float firerate; 
 	float cooldown; 
+	float power; 
 	float range;
 	Mob* target;
 	Bullet* bullet; 

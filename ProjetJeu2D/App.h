@@ -10,8 +10,7 @@ class App //Sert tout simplement d'avoir un interface
 public:
 	void init();
 	void run();
-	sf::RenderWindow& getWindow();
-};
+	sf::RenderWindow& getWindow();};
 
 #endif
 

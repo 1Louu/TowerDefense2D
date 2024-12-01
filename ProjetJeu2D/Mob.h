@@ -8,12 +8,14 @@
 
 class Mob : public Entity, public Alive, public AMovable {
 	int itinerarystep;
+	int* HPPlayer; 
 	std::vector<Path*>* itinerary; 
 public:
-	Mob(float _x, float _y, sf::Texture& _texture, int _textcordX, int _textcordY, int textsize, float _width, float _length, float _maxHP, float _vit, std::vector<Path*>* _itinerary);
+	Mob(float _x, float _y, sf::Texture& _texture, int _textcordX, int _textcordY, int textsize, float _width, float _length, float _maxHP, float _vit, std::vector<Path*>* _itinerary, int* _HP);
 	virtual void takeDMG(float _DMG) override;
 	virtual void move(float dt) override;
 	virtual void update(float dt) override;
+
 
 	void setTextureSetting(sf::Texture& _texture, int _textcordX, int _textcordY, int textsize, float _width, float _length);
 	void updateDirection(); 

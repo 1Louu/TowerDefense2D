@@ -14,7 +14,8 @@ public:
 	sf::Sprite getVisual();
 	virtual void setVisual(sf::Texture& _texture, int _textcordX, int _textcordY, int textsizex, int textsizey, float _width, float _length);
 	virtual void update(float dt) {}
-
+	virtual int getflagDestroy();
+	virtual void setflagDestroy(int _flag);
 
 };
 

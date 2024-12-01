@@ -19,9 +19,6 @@ Entity::Entity(float _x, float _y)
 void Entity::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	// _states.transform = _states.transform.combine(this->getTransform());
-	// 
-	// Reason why im disabling line above here is bc localbound of m_visual *isnt* updated.
-	// Best to find a better way to do this
 
 	_target.draw(m_visual, _states);
 	_target.draw(m_text, _states); 
@@ -29,7 +26,7 @@ void Entity::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 
 sf::Sprite Entity::getVisual()
 {
-	return sf::Sprite();
+	return m_visual;
 }
 
 void Entity::setVisual(sf::Texture& _texture, int _textcordX, int _textcordY, int textsizex, int textsizey, float _width, float _length)
@@ -37,4 +34,14 @@ void Entity::setVisual(sf::Texture& _texture, int _textcordX, int _textcordY, in
 	m_visual.setTexture(_texture);
 	m_visual.setTextureRect(sf::IntRect(_textcordX, _textcordY, textsizex, textsizey));
 	m_visual.setScale(_width / textsizex, _length / textsizey);
+}
+
+int Entity::getflagDestroy()
+{
+	return flagDestroy;
+}
+
+void Entity::setflagDestroy(int _flag)
+{
+	flagDestroy = _flag; 
 }

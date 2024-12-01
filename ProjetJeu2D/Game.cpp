@@ -100,12 +100,12 @@ void Game::init()
 	updatePath();
 
 	// MOBS
-	e = new Mob(GameScreenX, GameScreenY + 32 * 5, textureMap, 6 * 8, 3 * 8, 8, 32, 32, 10, 100, &itinerary);
+	e = new Mob(GameScreenX, GameScreenY + 32 * 5, textureMap, 6 * 8, 3 * 8, 8, 32, 32, 10, 100, &itinerary, &HP);
 	VisualEntityList.push_back(e);
 	mobmanager.push_back(e);
 
 
-	e = new Mob(GameScreenX, GameScreenY + 32 * 5, textureMap, 6 * 8, 2 * 8, 8, 32, 32, 10, 25, &itinerary);
+	e = new Mob(GameScreenX, GameScreenY + 32 * 5, textureMap, 6 * 8, 2 * 8, 8, 32, 32, 10, 25, &itinerary, &HP);
 	VisualEntityList.push_back(e);
 	mobmanager.push_back(e);
 
@@ -114,8 +114,8 @@ void Game::init()
 	VisualEntityList.push_back(tower);
 
 	//btn
-	bg = new Background(GameScreenX, GameScreenY + GameScreen + 16, textureMap, 0 * 8, 4 * 8, 16, 64, 64);
-	VisualEntityList.push_back(bg);
+	btn = new Button(GameScreenX, GameScreenY + GameScreen + 16, textureMap,CurrentApp,1 );
+	VisualEntityList.push_back(btn);
 
 	// towerpic
 	bg = new Background(GameScreenX + 16, GameScreenY + GameScreen + 16 + 12, textureMap, 8 * 8, 2 * 8, 8, 32, 32);
@@ -131,8 +131,9 @@ void Game::init()
 	VisualEntityList.push_back(texts);
 
 	//btn
-	bg = new Background(GameScreenX + 96, GameScreenY + GameScreen + 16, textureMap, 0 * 8, 4 * 8, 16, 64, 64);
-	VisualEntityList.push_back(bg);
+
+	btn = new Button(GameScreenX + 96, GameScreenY + GameScreen + 16, textureMap, CurrentApp, 2);
+	VisualEntityList.push_back(btn);
 
 	// towerpic
 	bg = new Background(GameScreenX + 112, GameScreenY + GameScreen + 16 + 12, textureMap, 7 * 8, 3 * 8, 8, 32, 32);
@@ -265,6 +266,36 @@ void Game::fillPath(int _index) // Function to fill the gap between CURRENT & PR
 					VisualEntityList.push_back(path);
 				}
 			}
+		}
+	}
+}
+
+void Game::buttonPress(int _case)
+{
+	switch (_case) {
+	case 1:
+		std::cout << "I have been pressed" << std::endl; 
+		break; 
+	case 2:
+		std::cout << "I have been pressed" << std::endl;
+		break;
+	}
+}
+
+void Game::update(float dt)
+{
+	Scene::update(dt);
+	for (int i = 0; i < VisualEntityList.size(); i++) {
+		switch (VisualEntityList[i]->getflagDestroy()) {
+		case 0:
+			break;
+		case 1: 
+			VisualEntityList[i]->setflagDestroy(2); // to make sure that we are letting all of our entity have their turn to detach themselves off from the flagged entity
+			break;
+		case 2:
+			delete (VisualEntityList[i]); // parenthese to be SURE SURE im deleting it right
+			VisualEntityList.erase(VisualEntityList.begin() + i); // Freeing space off the vector
+			i--; //because i freed space, the vector has moved the content to the current index and reduced its size. 
 		}
 	}
 }
